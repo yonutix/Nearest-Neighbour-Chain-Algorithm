@@ -2,7 +2,6 @@ package API;
 
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.Stack;
 
 public class NearestNeighbourChainAlgorithm<T extends AbstractNode> {
@@ -10,14 +9,17 @@ public class NearestNeighbourChainAlgorithm<T extends AbstractNode> {
 	Class<T> reference;
 
 	ArrayList<Cluster<Integer, T>> clusterSet;
+	
+	BinaryTree<Integer> output;
+	ArrayList<BinaryTree<Integer>> intermediar;
 
 	public NearestNeighbourChainAlgorithm(String filename, Class<T> classRef) {
 		reference = classRef;
 		points = new ArrayList<T>();
 		clusterSet = new ArrayList<Cluster<Integer, T>>();
+		intermediar = new ArrayList<BinaryTree<Integer>>();
 		try {
 			RandomAccessFile raf = new RandomAccessFile(filename, "r");
-
 			String line = "";
 			int i = 0;
 			while ((line = raf.readLine()) != null) {
@@ -26,6 +28,7 @@ public class NearestNeighbourChainAlgorithm<T extends AbstractNode> {
 				points.add(newNode);
 				clusterSet.add(new Cluster<Integer, T>((T) newNode.copy()));
 				clusterSet.get(clusterSet.size() - 1).add(i);
+				intermediar.add(new BinaryTree<Integer>(i));
 				i++;
 			}
 			raf.close();
@@ -37,7 +40,7 @@ public class NearestNeighbourChainAlgorithm<T extends AbstractNode> {
 
 	int it = 0;
 
-	public void loop() {
+	public void execute() {
 		Stack<Cluster<Integer, T>> st = new Stack<Cluster<Integer, T>>();
 		while (clusterSet.size() > 1) {
 			it++;
@@ -112,14 +115,25 @@ public class NearestNeighbourChainAlgorithm<T extends AbstractNode> {
 				clusterSet.remove(maxI);
 				clusterSet.remove(minI);
 				
+				BinaryTree<Integer> mergeResult = BinaryTree.merge(intermediar.get(minIndex), intermediar.get(currentIndex));
+				intermediar.add(mergeResult);
+				
+				intermediar.remove(maxI);
+				intermediar.remove(minI);
+				
+				
 			} else {
 				System.out.println("Add new cluster to stack");
 				System.out.println(clusterSet.get(minIndex));
 				st.push(clusterSet.get(minIndex));
 			}
-
-			
 		}
+		if(intermediar.size() > 0)
+			output = intermediar.get(0);
 
+	}
+	
+	public BinaryTree<Integer> getOutput(){
+		return output;
 	}
 }
