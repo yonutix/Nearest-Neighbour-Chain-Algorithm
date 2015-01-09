@@ -93,14 +93,72 @@ public class BinaryTree<T> {
 		return dump;
 	}
 	
-	public static<T> ArrayList<T> getNodesOnLevel(BinaryTree<T> tree, int currentLevel, int level){
-		ArrayList<T> result = new ArrayList<T>();
+	public static<T> int getLevelCount(BinaryTree<T> tree){
+		ArrayList<BinaryTree<T>> level1 = new ArrayList<BinaryTree<T>>();
+		ArrayList<BinaryTree<T>> level2 = new ArrayList<BinaryTree<T>>();
+		
+		level1.add(tree);
+		int count = 0;
+		while(!level1.isEmpty()){
+			count++;
+			for(BinaryTree<T> bt: level1){
+				if(bt.left != null)
+					level2.add(bt.left);
+				if(bt.right != null)
+					level2.add(bt.right);
+			}
+			
+			level1.clear();
+			
+			ArrayList<BinaryTree<T>> tmpLevel = level1;
+			level1 = level2;
+			level2 = tmpLevel;
+			
+		}
+		return count;
+	}
+	
+	public boolean isLeaf(){
+		return ((left == null) && (right == null));
+	}
+	
+	public static<T> int getLeafNr(BinaryTree<T> tree){
+		ArrayList<BinaryTree<T>> level1 = new ArrayList<BinaryTree<T>>();
+		ArrayList<BinaryTree<T>> level2 = new ArrayList<BinaryTree<T>>();
+		
+		level1.add(tree);
+		int count = 0;
+		while(!level1.isEmpty()){
+			
+			for(BinaryTree<T> bt: level1){
+				if(bt.getInfo() != null){
+					count++;
+				}
+				
+				if(bt.left != null)
+					level2.add(bt.left);
+				if(bt.right != null)
+					level2.add(bt.right);
+			}
+			
+			level1.clear();
+			
+			ArrayList<BinaryTree<T>> tmpLevel = level1;
+			level1 = level2;
+			level2 = tmpLevel;
+			
+		}
+		return count;
+	}
+	
+	public static<T> ArrayList<BinaryTree<T>> getNodesOnLevel(BinaryTree<T> tree, int currentLevel, int level){
+		ArrayList<BinaryTree<T>> result = new ArrayList<BinaryTree<T>>();
 		if(currentLevel == level){
-			result.add(tree.getInfo());
+			result.add(tree);
 			return result;
 		}
-		ArrayList<T> resultLeft = new ArrayList<T>();
-		ArrayList<T> resultRight = new ArrayList<T>();
+		ArrayList<BinaryTree<T>> resultLeft = new ArrayList<BinaryTree<T>>();
+		ArrayList<BinaryTree<T>> resultRight = new ArrayList<BinaryTree<T>>();
 		
 		if(tree.getLeft() != null){
 			resultLeft = getNodesOnLevel(tree.getLeft(), currentLevel+1, level);
@@ -114,8 +172,37 @@ public class BinaryTree<T> {
 		result.addAll(resultRight);
 		
 		return result;
+	}
+	
+	public static<T> ArrayList<T> getAllLeaves(BinaryTree<T> tree){
+		ArrayList<BinaryTree<T>> level1 = new ArrayList<BinaryTree<T>>();
+		ArrayList<BinaryTree<T>> level2 = new ArrayList<BinaryTree<T>>();
 		
+		ArrayList<T> result = new ArrayList<T>();
 		
+		level1.add(tree);
+		while(!level1.isEmpty()){
+			
+			for(BinaryTree<T> bt: level1){
+				if(bt.getInfo() != null){
+					result.add(bt.getInfo());
+				}
+				
+				if(bt.left != null)
+					level2.add(bt.left);
+				if(bt.right != null)
+					level2.add(bt.right);
+			}
+			
+			level1.clear();
+			
+			ArrayList<BinaryTree<T>> tmpLevel = level1;
+			level1 = level2;
+			level2 = tmpLevel;
+			
+		}
+		
+		return result;
 	}
 
 }

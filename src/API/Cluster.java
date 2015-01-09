@@ -54,7 +54,6 @@ public class Cluster<T, C extends AbstractNode> extends ArrayList<T> {
 		for (T element : this) {
 			res += element.toString() + " ";
 		}
-		System.out.println();
 		res += centroid.toString();
 		return res;
 	}
@@ -92,8 +91,8 @@ public class Cluster<T, C extends AbstractNode> extends ArrayList<T> {
 
 		for (X element : a) {
 			X newElement = copy(element);
-			System.out.println(element);
-			System.out.println(newElement);
+			//System.out.println(element);
+			//System.out.println(newElement);
 
 			newCLuster.add(copy(element));
 		}

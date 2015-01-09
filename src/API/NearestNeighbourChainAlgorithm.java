@@ -1,5 +1,6 @@
 package API;
 
+import java.awt.geom.Point2D;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Stack;
@@ -44,25 +45,25 @@ public class NearestNeighbourChainAlgorithm<T extends AbstractNode> {
 		Stack<Cluster<Integer, T>> st = new Stack<Cluster<Integer, T>>();
 		while (clusterSet.size() > 1) {
 			it++;
+			/*
 			System.out.println(it + "=============================");
 			for(Cluster<Integer, T> e: st){
 				System.out.println(e);
 			}
 			System.out.println(it + "=============================");
-			
+			*/
 			
 			if (st.empty()) {
 
 				int randomCluster = (int) (Math.random() * clusterSet.size());
 				st.push(clusterSet.get(randomCluster));
-				System.out.println("Stack empty, " + randomCluster
-						+ " selected");
+				//System.out.println("Stack empty, " + randomCluster	+ " selected");
 				continue;
 			}
 
 			Cluster<Integer, T> currentCluster = st.peek();
-			System.out.println("Current cluster: ");
-			System.out.println(currentCluster);
+			//System.out.println("Current cluster: ");
+			//System.out.println(currentCluster);
 
 			// Compute the distance from current clusters to all other clusters
 			// and get the minimum distance
@@ -85,29 +86,29 @@ public class NearestNeighbourChainAlgorithm<T extends AbstractNode> {
 					currentIndex = i;
 				}
 			}
-			System.out.println("**** " + minIndex + " " + currentIndex);
+			//System.out.println("**** " + minIndex + " " + currentIndex);
 			
-			System.out.println("Min cluster: ");
-			System.out.println(clusterSet.get(minIndex));
-			System.out.println("#############" + minDist + " " + minIndex);
+			//System.out.println("Min cluster: ");
+			//System.out.println(clusterSet.get(minIndex));
+			//System.out.println("#############" + minDist + " " + minIndex);
 
 			if (st.contains(clusterSet.get(minIndex))) {
-				System.out.println("st contain " + minIndex);
+				//System.out.println("st contain " + minIndex);
 				Cluster<Integer, T> a = clusterSet.get(minIndex);
 				Cluster<Integer, T> b = st.peek();
 
 				clusterSet.add(Cluster.merge(a, b));
 				
-				System.out.println("Merged cluster");
+				//System.out.println("Merged cluster");
 				
-				System.out.println(clusterSet.get(clusterSet.size()-1));
+				//System.out.println(clusterSet.get(clusterSet.size()-1));
 
 				st.remove(st.indexOf(clusterSet.get(minIndex)));
 				st.pop();
 				
-				System.out.println("deleted:");
-				System.out.println(clusterSet.get(minIndex));
-				System.out.println(clusterSet.get(currentIndex));
+				//System.out.println("deleted:");
+				//System.out.println(clusterSet.get(minIndex));
+				//System.out.println(clusterSet.get(currentIndex));
 				
 				int minI = (minIndex<currentIndex)?minIndex:currentIndex;
 				int maxI = (minIndex>currentIndex)?minIndex:currentIndex;
@@ -123,8 +124,8 @@ public class NearestNeighbourChainAlgorithm<T extends AbstractNode> {
 				
 				
 			} else {
-				System.out.println("Add new cluster to stack");
-				System.out.println(clusterSet.get(minIndex));
+				//System.out.println("Add new cluster to stack");
+				//System.out.println(clusterSet.get(minIndex));
 				st.push(clusterSet.get(minIndex));
 			}
 		}
@@ -135,5 +136,9 @@ public class NearestNeighbourChainAlgorithm<T extends AbstractNode> {
 	
 	public BinaryTree<Integer> getOutput(){
 		return output;
+	}
+	
+	public ArrayList<T> getPoints(){
+		return points;
 	}
 }
